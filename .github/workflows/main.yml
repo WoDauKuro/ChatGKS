@@ -1,0 +1,26 @@
+name: Deploy to Hugging Face Spaces
+
+on:
+  push:
+    branches:
+      - main  # Change this to match your default branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git clone https://huggingface.co/spaces/wodaukuro/chatGKS
+          rsync -av --exclude='.git' . chatGKS/
+          cd chatGKS
+          git config --global user.email "kurolegz7@gmail.com"
+          git config --global user.name "wodaukuro"
+          git add .
+          git commit -m "Auto-deploy from GitHub"
+          git push https://wodaukuro:$HF_TOKEN@huggingface.co/spaces/wodaukuro/chatGKS main
