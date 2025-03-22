@@ -1,4 +1,4 @@
-# LLM RAG Chatbot for Church Organization
+# LLM RAG Chatbot for God's Kingdom Society
 
 An AI-powered chatbot for the God's Kingdom Society built using LangChain and Hugging Face. Designed to support the God's Kingdom Society (GKS), the chatbot leverages a collection of GKS documents stored in the `data` folder for document retrieval and uses a Gradio interface for interactive deployment. The chatbot is deployed on Hugging Face Spaces.
 
