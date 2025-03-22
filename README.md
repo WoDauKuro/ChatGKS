@@ -86,7 +86,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 **Important:** While the Apache License 2.0 allows derivative works, the author(s) of this project require explicit written consent for any derivative work to be distributed or used publicly.
 
-Please refer to the [Derivative Work Consent](WORK_CONSENT.md) document for instructions on how to request consent.
+Please refer to the [Derivative Work Consent](WORK_CONSENT) document for instructions on how to request consent.
 
 ## Contact
 
