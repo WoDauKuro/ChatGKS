@@ -6,6 +6,8 @@ import os
 import textwrap
 import gradio as gr
 from typing import List, Tuple, Optional
+from huggingface_hub import list_repo_files
+import requests
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import CharacterTextSplitter
@@ -22,14 +24,35 @@ warnings.filterwarnings('ignore')
 
 groq_api_key = settings.groq_api_key
 
-# Directory containing PDF files
-pdf_directory = "/data/"
+# Define the dataset repository ID
+repo_id = "wodaukuro/chatgks-data"
 
-# Create directory if it doesn't exist
-os.makedirs(pdf_directory, exist_ok=True)
+# List all files in the dataset repository (only PDFs will be processed)
+files = list_repo_files(repo_id, repo_type="dataset")
+print("Files in dataset:", files)
 
-# Get list of PDF files
-pdf_files = [os.path.join(pdf_directory, f) for f in os.listdir(pdf_directory) if f.endswith('.pdf')]
+# Create a local directory to store PDFs
+data_dir = "data"
+os.makedirs(data_dir, exist_ok=True)
+
+# Base URL for downloading files
+base_url = f"https://huggingface.co/datasets/{repo_id}/resolve/main/"
+
+pdf_files = []
+
+for file in files:
+    # Process only PDF files
+    if file.lower().endswith('.pdf'):
+        pdf_url = base_url + file
+        pdf_name = file.split('/')[-1]  # Extract the file name
+        pdf_path = os.path.join(data_dir, pdf_name)
+        if not os.path.exists(pdf_path):
+            response = requests.get(pdf_url)
+            response.raise_for_status()  # Ensure the request was successful
+            with open(pdf_path, "wb") as f:
+                f.write(response.content)
+            print(f"Downloaded: {pdf_name}")
+        pdf_files.append(pdf_path)
 
 # Load documents
 documents = []
