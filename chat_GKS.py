@@ -25,8 +25,12 @@ groq_api_key = settings.groq_api_key
 # Directory containing PDF files
 pdf_directory = "data"
 
-# Create directory if it doesn't exist
+# Create `data` directory if it doesn't exist
 os.makedirs(pdf_directory, exist_ok=True)
+
+# Directory to store the Chroma database
+persist_directory = "chroma_db"
+os.makedirs(persist_directory, exist_ok=True)
 
 # Get list of PDF files
 pdf_files = [os.path.join(pdf_directory, f) for f in os.listdir(pdf_directory) if f.endswith('.pdf')]
@@ -48,7 +52,7 @@ texts = text_splitter.split_documents(documents)
 
 # Embeddings and vector store
 embeddings = HuggingFaceEmbeddings()
-vectordb = Chroma.from_documents(documents=texts, embedding=embeddings, persist_directory="chroma_db")
+vectordb = Chroma.from_documents(documents=texts, embedding=embeddings, persist_directory=persist_directory)
 retriever = vectordb.as_retriever(k=7)
 
 # LLM initialization
